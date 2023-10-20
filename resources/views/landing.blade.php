@@ -32,7 +32,7 @@
                                         <th>Timezone</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody id="location-tbody"></tbody>
                             </table>
                         </div>
                         <div class="air-quality">
@@ -50,7 +50,7 @@
                                         <th>Air Quality Index-US</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody id="air-quality-tbody"></tbody>
                             </table>
                         </div>
                         <div>
@@ -119,6 +119,7 @@
         }
 
         button.addEventListener("click", () => {
+            button.disabled = true;
             navigator.geolocation.getCurrentPosition(success, failed);
         });
 
@@ -126,7 +127,10 @@
             let element = document.getElementById("table-container");
             element.classList.remove("d-none");
 
-
+            const locationTbody = document.getElementById("location-tbody");
+            const airQualityTbody = document.getElementById("air-quality-tbody");
+            locationTbody.innerHTML = "";
+            airQualityTbody.innerHTML = "";
             //air quality table
             const row = tableBody.insertRow();
             const CarbonMonoxideCell = row.insertCell(0);
@@ -169,7 +173,11 @@
             document.getElementById("feels-like").textContent = result.current.feelslike_c;
             document.getElementById("wind-gust-speed").textContent = result.current.gust_kph;
             document.getElementById("humidity").textContent = result.current.humidity;
-            document.getElementById("isDay").textContent = result.current.is_day;
+            if(result.current.is_day == 0){
+                document.getElementById("isDay").textContent = "Night";
+            }else{
+                document.getElementById("isDay").textContent = "Day"
+            }
             document.getElementById("lastUpdated").textContent = result.current.last_updated;
             document.getElementById("airPressure").textContent = result.current.pressure_in;
             document.getElementById("temperature").textContent = result.current.temp_c;
